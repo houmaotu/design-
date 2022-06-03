@@ -1,0 +1,18 @@
+一 特性 fundimental
+1 封装 (encapsulation)
+      概念：class 类 object（call class出来的玩意） 例如
+      attribute function放在class里面 写出来access modifier(public python 默认 private _ protected __) 
+2 继承 (inheritance)
+      类 子类（可以用父类别所有的 除private 可以重写overwrite 重载overload 不同输入类型的重写 inheritance直接用爹的 super 注意final 不许继承 java的玩意）
+      抽象类 （不能初始化 只能用子类初始化 可以抽象函数 抽象类的子类必须写出抽象函数 否则仍然还是抽象类
+      interface 接口出去的类 （父类只有一个 interface可以有很多 interface的抽象类的抽象函数必须都有）
+3 多态 (polymorphism) 一个function 不同的表现方式
+
+二。原则
+1 single responsibility prciciple 单一责任原则 
+        一个类只负责一种功能 避免臃肿 例如 计算三角形面的类需要增加print功能 函数不直接加在类里面 而是再写一个print类
+2 Open close principle 开放封闭原则
+        对扩展开放 对修改封闭（opeo to extention,close to modification）计算三角形面的类 扩展也可计算长方形 也是不写直接写计算长方形的函数 
+                                                                      写个抽象类 下面有shape和get area 直接在areacal类直接叫函数
+3 计算三角形面的类                                                                                     
+                                                                      
