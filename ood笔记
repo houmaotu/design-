@@ -7,6 +7,9 @@
       抽象类 （不能初始化 只能用子类初始化 可以抽象函数 抽象类的子类必须写出抽象函数 否则仍然还是抽象类
       interface 接口出去的类 （父类只有一个 interface可以有很多 interface的抽象类的抽象函数必须都有）
 3 多态 (polymorphism) 一个function 不同的表现方式
+4 异常 exception  
+    checked exception (加上try) unchecked exception (例如runtime exception)
+5 枚举类 enum 阻止传过去诡异的变量  加上了限制
 
 二。原则
 1 single responsibility prciciple 单一责任原则 
@@ -14,5 +17,20 @@
 2 Open close principle 开放封闭原则
         对扩展开放 对修改封闭（opeo to extention,close to modification）计算三角形面的类 扩展也可计算长方形 也是不写直接写计算长方形的函数 
                                                                       写个抽象类 下面有shape和get area 直接在areacal类直接叫函数
-3 计算三角形面的类                                                                                     
+3 Liskov substuituitio printiple 里氏替换原则
+        一个子类应该可以替换他的父类 例如 shape类别 可以计算体积 面积 然后tiangle继承就不好 因为没有提及
+4 interface segregatin principle 接口分离原则
+       一个类别不应该实现用不上的接口
+5 dependency inversion principle 依赖反转原则
+   抽象不依赖于具体实现，具体依赖于抽象 high level的实体不依赖low level
+   例如 areacalcuator 依赖于triangle 不好 triangle 依赖于 areacalcuator 好
+   
+三。解法
+例如 design evevator system for this buiding
+1clarify 找关键字 evevator 客梯货梯？buiding ：多个电梯 几个电梯可以响应一个请求 几个可以搭乘
+         规则：电梯规则 判断超重 哪个电梯会相应request 能否瞎JB按
+2core object 用一个object作为基础 确定object之间的关系  必须存在的类别 elevator system 线性的其他类 request elevator button
+                                                     类别之间的关系 一个电梯系统好几个电梯。。。
+
+                                                                                    
                                                                       
