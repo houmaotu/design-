@@ -31,6 +31,18 @@
          规则：电梯规则 判断超重 哪个电梯会相应request 能否瞎JB按
 2core object 用一个object作为基础 确定object之间的关系  必须存在的类别 elevator system 线性的其他类 request elevator button
                                                      类别之间的关系 一个电梯系统好几个电梯。。。
-
-                                                                                    
-                                                                      
+ 注意 画类图 access modifier package( package都能看见避免使用) public（+ 任何类可看见） pravite（- 本类可见） protected（# 子类可见）
+3 use case 支持的功能   core object 之后 支持什么场景  例如  elevator 处理：内部request 外部request 开门 。。。                                                                               
+4 class 画类图（class diagram） 画出类的 function variable 之间的关系   
+       context: elevator system 然后依赖于interface: handlerequest setstrategy .... 然后下面分strategy ABC....
+   exception：一个别的类
+5 correctness 检车一下       
+ 四。管理类 高频
+   思路：clarify 找关键字 object：输入输出是啥 车/停在哪 use case: 角度：管理员 reserve serve checkout class:用收据的形式 做了什么
+   例子：parking lot
+   1 clarify what: 管理什么 车（种类 大小） 车库（露天 停车楼） 车位（车 残疾人 电动车）需要面试的时候商量
+             how 大车怎么停 几层 怎么收费
+   
+   2 core obj    input bus car moto -> parking lot -> spot
+    
+   
