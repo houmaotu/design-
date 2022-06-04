@@ -62,4 +62,26 @@
                     但是多线程可能出问题 转换的时候可能出问题 public static synchronized 锁住
                                 静态内部 略
                                 config服务所有
+                                
+   例子：餐厅  不预定
+   1 clarify what: 桌子 party 收费
+             how：预约 外卖
+         思考模式： input output 客人进去 返回table 点菜 返回才 付账 清空table吗  （也可以是流程客人从今到出去）
+   2 core obj  party -> restaruant -> table -> order -> meal
+                        menu                   meal
+                        table                  table
+                                               meal
+  3 case： 功能    restaruant find table, take order, checkout
+  4 class : restaruant: find table, table avail, status
+            take order:  restaruant(order), order 传进去order table
+            check out: order 里面 table.. list of meals
+            其他 party size， share table, reserve
+  5 correctness
+  
+  五：预定类 （基于管理）  
+  use case: search select cancel 注意receipt
+  
+  例子: 餐厅 预订
+    search: 人数 日期 时间
+   
                     
