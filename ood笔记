@@ -182,4 +182,45 @@ factory design pattern:  例如kindle read  需要相应的reader
               
             cal points
          ，
-   例子: black jack
+   例子: black jack 
+         需要了解一些规则 玩家先搞 call  17分 。。。 平局dealer 胜 玩家之间无关
+         
+   2 core obj：
+        player, dealer, hand,  deck , card suit
+                               dealer
+                               list of players
+   3 use case: initilaize: give initial hand
+               play: deal, stop
+               w/l check
+               
+    4 case: join game: join game, place bet
+            shuffle:
+            
+            deal 
+         
+八 design pattern 
+
+singleton: 基本式： private构造函数 static的记录是否用过  public调用 第一个构造 后面直接用
+           线程安全式：public static synchronize
+           静态内部类： 构造的函数final的 （额外）
+           
+           目的：强制class只有一个instance
+
+state： 目的：函数的表现受状态影响，且函数会使状态转换
+
+adapter： 转接口 （不常见）
+
+factory: simple factory: read 叫reader, reader 根据书叫相应的 （而不是把reader直接放在read里面）
+         factory method: 可以在子类改写reader方法
+         abstract facroty: 还是子类 但是父为虚拟类
+         
+ decorator:   decorator子类 overwrite 常见可视化（图层）
+        
+
+
+
+
+
+
+
+
