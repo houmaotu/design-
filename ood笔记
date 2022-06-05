@@ -33,11 +33,15 @@
                                                      类别之间的关系 一个电梯系统好几个电梯。。。
  注意 画类图 access modifier package( package都能看见避免使用) public（+ 任何类可看见） pravite（- 本类可见） protected（# 子类可见）
 3 use case 支持的功能   core object 之后 支持什么场景  例如  elevator 处理：内部request 外部request 开门 。。。 （user角度 server角度）                                                                              
-4 class 画类图（class diagram） 画出类的 function variable 之间的关系   
-       context: elevator system 然后依赖于interface: handlerequest setstrategy .... 然后下面分strategy ABC....
+4 class 画类图（class diagram） 画出类的 function variable 之间的关系 
+
+  strategy design pattern     
+    :context: elevator system 然后依赖于interface: handlerequest setstrategy .... 然后下面分strategy ABC....
+    
    exception：一个别的类
 5 correctness 检车一下       
  四。管理类 高频
+ 
    思路：clarify 找关键字 object：输入输出是啥 车/停在哪 use case: 角度：管理员 reserve serve checkout class:用收据的形式 做了什么
    例子：parking lot
    1 clarify what: 管理什么 车（种类 大小） 车库（露天 停车楼） 车位（车 残疾人 电动车）需要面试的时候商量
@@ -56,7 +60,7 @@
     5 correctness：走一次iu可以了 查一下excepetion ticket不好用 停车满了
       challenge： 连续的车位 加一个row为一排
       
-   design pattern(singleton一个类一个instance 谁都可以访问)
+   singleton design pattern(一个类一个instance 谁都可以访问)
            parkinglot: private的生成 public static 的访问（第一次创建 后面访问） static private变量记录是否在public调用过 
                         static变量依赖于类 不依赖于instance）
                     但是多线程可能出问题 转换的时候可能出问题 public static synchronized 锁住
@@ -82,6 +86,100 @@
   use case: search select cancel 注意receipt
   
   例子: 餐厅 预订
-    search: 人数 日期 时间
+    search: 人数 日期 时间 （是否有限制 日期 时间）
+          output list of time slots 或者 不行的throw excepetion
+     
+    在餐厅的基础上 加上reservation、
+            reserve table timeslot
+            restaruant: find reservation, confirm reservation
+          
+             table 加上预定的时间
    
-                    
+  例子 hotel 针对一家宾馆 
+    1 clarify
+      what: search criteria -> search -> list(result) > select() -> receipt
+            search criteria 人数 时间 等等
+            list(result) 应该出来一个 list（room type）
+      how: search criteria 人数 孩子 smoking etc
+      
+    2 core obj:
+       request  -> hotel -> roomtype
+                   room  
+                  reservation(rooms)
+    3 use case: search select cancel
+    4 classes: 
+            search:           
+               request: stard / end
+               hotel: map(大床 1间。。。) handel request
+               
+               rmmo type single/ouble
+               
+         make reserve:
+                make reserve: send to hotel/exception
+                request: stard, end needed
+                
+                搜索的时候注意使用缓存 （LRU cashe  双向链表+hash）
+
+六：实物 需要考虑实物的输入 输出
+
+1 clarify what: payment (money coin card)-> vendingmachine (大小限制 item soldout)-> item               
+          how: (代号 or button)
+          
+2 core obj          coin -> vendingmachine -> item (coke)
+3 use case: select item, insert coin, transaction, cancel transactin, refill
+4 classes: select item: vendingmachine: select item    加上item info class
+           insert coin: insert a list of coins
+           transaction: vendingmachine + list of colins, selected items ... enum coin 类别 execture money
+                  refund: 招零
+           cancel： return coins
+           refill...
+    注意： map(list of item,info) ->stock  这种数据结构 可以用一个类来封起来 stock， 里面private了东西,然后搞一个add方法
+    
+ state design pattern: (已经按过了) 次序不对扔err
+ 
+ 例子 coffee maker
+ 1 clarify input output 咖啡包 咖啡            
+       how:brew
+ 2 core obj: coffeepack coffeemaker coffee(各种子类,搞出来has...) 下略
+                   
+decorator design pattern （有点像图层） 把这玩意加在coffee类别
+
+
+factory design pattern:  例如kindle read  需要相应的reader
+            simple factory: read 叫reader, reader 根据书叫相应的 （而不是把reader直接放在read里面）
+            factory method: 可以在子类改写reader方法
+            abstract facroty: 还是子类 但是父为虚拟类
+            
+ 注意: strategy vs factory = behavior vs creation 
+    
+七:棋牌类 
+玩家 规则 胜负 积分
+一些术语: board suit hand 以及state initialization play check
+
+例子： tic tac toe 井字格
+
+1 clarify player: player类别: 需要属性/只有先后手
+          规则： 棋：描述 胜负和 先后手 棋盘
+2 core obj   TicTacToc  board
+              board
+3 use case : initialization： board char[][]
+        play: make move, change player
+              该谁走 tictactoc curmove, move, change player
+              board: checkwin, isfull
+              
+例子 中国象棋: 1 一局棋 2 大厅 选择大厅作为例子
+     1 charify 区分玩家 积分
+               规则 走法 时间 悔棋 胜负
+     2  obj: player chinesechess  game piece(rook, minion, knight)
+                     games        player
+                                  board
+     3 use case: join game, set up game， check w/l/tie, record step, 结算
+     4 classe: game：join game: (坐满..)
+            set up: piece (color,role) 都是snum
+            move: curplayer, check move valid 在game里面加上move ... 
+              change player
+              check win..
+              
+            cal points
+         ，
+   例子: black jack
