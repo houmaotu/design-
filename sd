@@ -8,8 +8,36 @@ sd 扯   ood coding
 scenerio：功能、访问量
      1 enumerta： 罗列功能 
      2 sort： 选择重要功能
-     3 analysis and predict:  估计qps(queri per second)
-service：服务拆分
+     3 analysis and predict:  估计qps(queri per second) qps = 日活跃 * 请求次数平均/ 86400 (一天多少秒)   peak *（2~9） . fast grow 再*3
+           qps 100 比本的server 
+                1000 稍好的server 考虑single point failure
+                1m 需要1k的cluster 考虑maintainence
+           
+                一个web server / SQL 1k qps ，一个NoSQL database(cassandra) 10k, NoSQL database(memcached)          
+service：服务拆分 一个逻辑系统的整合
+        1 replay 重放 2 merge 归并  （user service .. media service ....）
 storage：如何存储 访问
+   数据库系统： database: sql/nosql             （注意 数据库系统依赖于文件系统）
+   文件系统：file
+   缓存 cache
+   steo 1：为每个服务选择存储结构
+   step 2：细化存储结构                （程序 = 算法+数据结构   系统 = 服务 + 数据存储）
+   
+   具体存储有各种foerign key等等...
 scale：升级可能遇到的问题
+ step 1 optimize: solve problems, features, special case
+ step 2 maintainenceL rouboust / scale
+ 
+ 例如： pull 缺陷(读请求的时候慢) 加入cache 存每个用户的timeline / news feed
+       push 空间（浪费存储空间） 硬盘很便宜 inactive user
+       popular user: follower 太多 加机器等等 pull 结合push
+ 
+三 新鲜事 news feed
+pull model: 查看关注的好友的前100条 然后merge （注意db read的时间比merge快多了你 东西多
+            缺陷：request sent之后再计算 慢
+push model: 把news feed list 直接扔进每个人的数据   问题fanout 关注的人太多了要扩散 好处 post danout async执行 东西少
+pull + push： 明星就不push了 普通人就push
 
+问题
+     （取消）关注： 把timeline 合并（删除） 异步进行 acynchronously 可能delay 但是快 
+     存储like： denomalize 
