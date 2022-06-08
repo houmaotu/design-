@@ -1,1 +1,15 @@
-system design
+一、区别
+sd vs ood:
+sd 扯   ood coding
+
+二、方法
+4s 分析法
+
+scenerio：功能、访问量
+     1 enumerta： 罗列功能 
+     2 sort： 选择重要功能
+     3 analysis and predict:  估计qps(queri per second)
+service：服务拆分
+storage：如何存储 访问
+scale：升级可能遇到的问题
+
