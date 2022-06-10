@@ -1,8 +1,8 @@
-一、区别
+一区别
 sd vs ood:
 sd 扯   ood coding
 
-二、方法
+方法
 4s 分析法
 
 scenerio：功能、访问量
@@ -13,7 +13,7 @@ scenerio：功能、访问量
                 1000 稍好的server 考虑single point failure
                 1m 需要1k的cluster 考虑maintainence
            
-                一个web server / SQL 1k qps ，一个NoSQL database(cassandra) 10k, NoSQL database(memcached)          
+                一个web server / mySQL、posgresql 1k qps ，一个NoSQL database(cassandra，mongo db) 10k, NoSQL database(memcached，redis)  100k - 1m        
 service：服务拆分 一个逻辑系统的整合
         1 replay 重放 2 merge 归并  （user service .. media service ....）
 storage：如何存储 访问
@@ -32,7 +32,7 @@ scale：升级可能遇到的问题
        push 空间（浪费存储空间） 硬盘很便宜 inactive user
        popular user: follower 太多 加机器等等 pull 结合push
  
-三 新鲜事 news feed
+ 新鲜事 news feed
 pull model: 查看关注的好友的前100条 然后merge （注意db read的时间比merge快多了你 东西多
             缺陷：request sent之后再计算 慢
 push model: 把news feed list 直接扔进每个人的数据   问题fanout 关注的人太多了要扩散 好处 post danout async执行 东西少
@@ -40,4 +40,47 @@ pull + push： 明星就不push了 普通人就push
 
 问题
      （取消）关注： 把timeline 合并（删除） 异步进行 acynchronously 可能delay 但是快 
-     存储like： denomalize 
+     存储like： normalize：就慢了
+               denormalize：虽然可以在一个like able上面直接计算 但是因为太慢 所以加一行记住
+     惊群现象：短时间一就访问一个了 sharding（分片机制） 就不太好用了
+             本来可以用cache（因为缓存过期、算法的原因） 结果去了db 就炸了
+             lease get 等一会再去db 这样子第一条访问就直接进cache了
+                     
+二 秒杀系统
+1 scenerio: 时间开始 限量 以价格 一人一台
+            qps： 平均秒1000访问 秒杀的时候增加100被 100k人
+            登录至购买页 开始之前、抢完了 灰色 否则可以购买 创建订单之后 如果还有库存锁定库存并且可以付款 付款成功ok 失败释放库存
+            
+            难点：大流量 高并发 /有限库存 不能超卖 /恶意请求 （黄牛 脚本）/ 定时开始 / 限购
+            
+            需求拆解：商家：新建秒杀 配置秒杀
+                     用户： 页面 购买 下单 付款
+2 service : 
+      结构 单体： monolithis 前后耦合（coupling）服务器压力大 不好扩展 协作困难 单一语言 级联故障（一个炸了 全炸）
+                            唯一优点是简单        
+      微服务 microserve 功能板块解耦（decouping）单一职责（single responsibilit） 拓展性强 写作清晰 故障隔离
+      
+ 3 storage：
+         商品 id name desc price
+         秒杀 id name 商品id price number
+         库存 id 商品id 库存 锁定
+         订单 id 商品id 活动id 用户id paid
+         
+     数据流： 商户 - select 商品 insert秒杀 库存
+            用户 select 秒杀 insert 订单 update 库存
+            
+     注意 超卖 请求同时到了的时候 库存1  方法 事务 可以锁住数据 这样子就ok了 但是很慢
+                                           update 扣掉库存的时候加上一条 行锁
+
+三 用户系统
+4s scenario service storage scale
+1 scenerio： 注册 登录  查询 （最大）修改 
+           假设支持100M DAU
+                   100M * 100 * 86400 = 100k peak 300k 查询 其他 大概就是100这样子 级联故障*cascading failure（
+2 servuce authentication service 登录
+  user service 用户信息
+  fridenship 好友关系
+ 3 strorage 注册 登录 修改 mysql
+ 注意用户系统 把要查的的东西
+ cache 缓存 memcached 不支持数据持久化（断点了就炸了 只有cache 用的多） radis 支持持久化（硬盘也有一份）cache约等于hashmap 但是有淘汰机制
+ 
